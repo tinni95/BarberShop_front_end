@@ -1,0 +1,17 @@
+{
+  "name": "universal",
+  "displayName": "universal",
+  "expo": {
+    "name": "universal",
+    "slug": "universal",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
