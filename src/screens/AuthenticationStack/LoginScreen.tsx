@@ -11,9 +11,9 @@ import LoginContext from '../../context/LoginContext';
 import HeaderLeft from '../../components/HeaderLeft';
 
 const LOGIN_MUTATION = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
+  mutation login($input: UsersPermissionsLoginInput!) {
+    login(input: $input) {
+      jwt
     }
   }
 `;
@@ -32,13 +32,16 @@ function LoginScreen({ context, navigation }) {
 
   let preinput = useRef<any>();
   let input = useRef<any>();
+
   const [loginMutation] = useMutation(LOGIN_MUTATION, {
     onCompleted: async ({ login }) => {
-      AsyncStorage.setItem(TOKEN_KEY, login.token).then(() => {
+      AsyncStorage.setItem(TOKEN_KEY, login.jwt).then(() => {
         context.login();
       });
     },
     onError: (error) => {
+      console.log(password)
+      console.log(email)
       if (error.toString().includes('password')) {
         setPasswordError(true);
       } else {
@@ -64,8 +67,10 @@ function LoginScreen({ context, navigation }) {
   const login = () => {
     loginMutation({
       variables: {
-        email: email.trim().toLowerCase(),
-        password,
+        input:{
+          identifier: email.trim().toLowerCase(),
+          password,
+        }
       },
     });
   };

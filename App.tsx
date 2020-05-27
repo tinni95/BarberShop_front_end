@@ -1,12 +1,56 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
 import AuthenticationStack from './src/navigation/AuthenticationStack';
 import * as Font from "expo-font";
 import { AppLoading } from 'expo';
-import { LandingPage } from './src/screens/AuthenticationStack';
+import { TOKEN_KEY } from './src/constants/Token';
+import ApolloClient from 'apollo-boost'
+import LoginContext from './src/context/LoginContext';
+import { ApolloProvider } from 'react-apollo';
+import AppWrapper from './src/screens/AppWrapper';
 
 export default function App() {
+  const [loggedIn, setLoggedin] = useState<boolean>(false);
+  const [token, setToken] = useState<any>(null);
   const [isLoadingComplete, setLoadingComplete] = useState<boolean>(false);
+
+  async function fetchToken(){
+    let token = await AsyncStorage.getItem(TOKEN_KEY);
+    return token;
+  }
+
+  const client = new ApolloClient({
+    request: (operation) => {
+      operation.setContext({
+        headers: {
+          authorization: token ? `Bearer ${token}` : ''
+        }
+      })
+    },
+    uri: "http://104.248.18.88/graphql"
+  })
+
+  function logout() {
+    AsyncStorage.removeItem(TOKEN_KEY).then(() => {
+      setLoggedin(false);
+    });
+    
+  }
+
+  function login() {
+    fetchToken().then(tokens => {
+      if(tokens){
+        console.log("token",tokens)
+        setToken(tokens);
+        setLoggedin(true)
+      }
+    })
+  }
+  
+  useEffect(()=>{
+    login()
+  },[])
+
   if (!isLoadingComplete) {
     return (
       <AppLoading
@@ -18,7 +62,17 @@ export default function App() {
   } else {
   return (
     <View style={styles.container}>
-     <AuthenticationStack></AuthenticationStack>
+        <ApolloProvider client={client}>
+          <LoginContext.Provider
+            value={{ logout: () => logout(), login: () => login() }}
+          >
+                {!loggedIn ? (
+                  <AuthenticationStack></AuthenticationStack>
+                ) : (
+                  <AppWrapper logout={() => logout()}></AppWrapper>
+                )}
+          </LoginContext.Provider>
+          </ApolloProvider>
     </View>
   );
   }

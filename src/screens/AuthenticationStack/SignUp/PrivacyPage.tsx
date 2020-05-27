@@ -9,38 +9,28 @@ import { useState } from 'react';
 import { gql } from 'apollo-boost';
 import { useMutation } from 'react-apollo';
 import { TOKEN_KEY } from '../../../constants/Token';
-import PushNotifications from '../../../functions/PushNotifications';
 import HeaderRight from '../../../components/HeaderRight';
 import LoginContext from '../../../context/LoginContext';
 import HeaderLeft from '../../../components/HeaderLeft';
 import * as WebBrowser from 'expo-web-browser';
 
 const SIGNUP_MUTATION = gql`
-  mutation signup($email: String!, $password: String!, $nome: String!, $cognome: String!) {
-    signup(email: $email, password: $password, nome: $nome, cognome: $cognome) {
-      token
-    }
-  }
-`;
-
-const UPDATEUSER_MUTATION = gql`
-  mutation updateUser($pushToken: String) {
-    updateUser(pushToken: $pushToken) {
-      pushToken
-      nome
+  mutation register($input: UserInput!) {
+    register(input: $input) {
+      jwt
     }
   }
 `;
 
 function PrivacyPage({ navigation, context, route }) {
   const [signup] = useMutation(SIGNUP_MUTATION, {
-    onCompleted: async ({ signup }) => {
-      await AsyncStorage.setItem(TOKEN_KEY, signup.token);
+    onCompleted: async ({ register }) => {
+      await AsyncStorage.setItem(TOKEN_KEY, register.jwt);
       context.login();
-      PushNotifications(updateUser);
     },
     onError: (error) => {
-      if (error.toString().includes('User already exists with that email')) {
+      console.log(error)
+      if (error.toString().includes('Email is already taken')) {
         navigation.navigate('EmailPage', {
           user: { nome, cognome },
           emailUsed: true,
@@ -48,8 +38,6 @@ function PrivacyPage({ navigation, context, route }) {
       }
     },
   });
-
-  const [updateUser] = useMutation(UPDATEUSER_MUTATION);
 
   const {
     user: { nome, cognome, email, password },
@@ -63,7 +51,7 @@ function PrivacyPage({ navigation, context, route }) {
 
   const login = () => {
     if (checked) {
-      signup({ variables: { nome, cognome, email:email.toLowerCase(), password } });
+      signup({ variables: { input:{username:nome,email:email.toLowerCase(), password }} });
     } else {
       alert('devi accettare i termini');
     }
@@ -92,16 +80,16 @@ function PrivacyPage({ navigation, context, route }) {
           <CheckBox
             isChecked={checked}
             onClick={() => setChecked(!checked)}
-            checkBoxColor={Colors.blue}></CheckBox>
+            checkBoxColor={Colors.secondary}></CheckBox>
           <Light style={{ margin: 5 }}>
             <Light>Accetto i</Light>
-            <Light style={{ color: Colors.blue }}> Termini e Condizioni</Light>
+            <Light style={{ color: Colors.secondary }}> Termini e Condizioni</Light>
           </Light>
         </View>
         <RoundButton
           onPress={() => login()}
           text={'Accetto'}
-          color={Colors.red}
+          color={Colors.secondary}
           textColor={'white'}></RoundButton>
       </View>
     </View>
@@ -111,7 +99,7 @@ function PrivacyPage({ navigation, context, route }) {
 const PrivacyPageWC = (props) => {
   return (
     <LoginContext.Consumer>
-      {(context) => <PrivacyPage {...props} context={context} />}
+      {(context:any) => <PrivacyPage {...props} context={context} />}
     </LoginContext.Consumer>
   );
 };
@@ -151,7 +139,7 @@ const styles = StyleSheet.create({
   },
   redTerms: {
     fontSize: 14,
-    color: Colors.red,
+    color: Colors.secondary,
     lineHeight: 29,
   },
   header: {

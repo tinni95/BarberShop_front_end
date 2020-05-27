@@ -6,6 +6,7 @@ import Colors from '../../constants/Colors';
 import { isSmallDevice } from '../../constants/Layout';
 
 export const LandingPage = ({ navigation: { navigate } }) => {
+  console.log(require('../../../assets/images/logo.png'))
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
@@ -61,7 +62,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     alignItems: 'center',
-    width: 200,
+    height: 128,
+    width: 128,
   },
   heading: {
     color: 'white',
