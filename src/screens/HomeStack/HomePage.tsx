@@ -4,8 +4,30 @@ import RoundButtonEmptyLarge from '../../components/RoundButtonEmptyLarge';
 import Colors from '../../constants/Colors';
 import { isSmallDevice } from '../../constants/Layout';
 import { Body, Bold } from '../../components/StyledText';
+import gql from 'graphql-tag';
+import { useQuery } from 'react-apollo';
+import { isOpened } from '../../functions/isOpened';
+
+const BarberShop = gql`
+  {
+    barberShop(id:"1"){
+    PhoneNumber
+  	opening_times{
+      OpeningTime
+      CloseTime
+      DayOfTheWeek
+    }
+  }
+  }
+`;
 
 export const HomePage = ({ navigation: { navigate } }) => {
+
+const {loading,data} = useQuery(BarberShop);
+if(loading){
+    return null
+}
+ 
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
@@ -14,6 +36,18 @@ export const HomePage = ({ navigation: { navigate } }) => {
           source={require('../../../assets/images/logo_full.png')}
           resizeMode="contain"
         />
+        {isOpened(data.barberShop.opening_times)
+        ?
+        (<View style={{flexDirection:"row",alignItems:"center"}}>
+            <Body>Opened</Body>
+            <View style={styles.statusGreen}/>
+        </View>):
+        (<View style={{flexDirection:"row"}}>
+            <Body>Closed</Body>
+            <View style={styles.statusGrey}/>
+        </View>)
+        }
+        <View style={{height:50}}></View>
         <Body style={{flexDirection:"row"}}>
             <Bold>Opening Times    </Bold>
             <Body>8.30 AM - 6.30 PM / Tuesday Closed </Body>
@@ -21,7 +55,7 @@ export const HomePage = ({ navigation: { navigate } }) => {
         <View style={{height:50}}></View>
         <Body style={{flexDirection:"row"}}>
             <Bold>Phone Number    </Bold>
-            <Body>07456123566123 </Body>
+            <Body>{data.barberShop.PhoneNumber} </Body>
         </Body>
       </View>
       <View style={styles.buttonsWrapper}>
@@ -82,6 +116,20 @@ const styles = StyleSheet.create({
     flex: 4,
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+  statusGreen: {
+    height: 15,
+    width: 15,
+    borderRadius: 7.5,
+    margin: 5,
+    backgroundColor: 'lightgreen',
+  },
+  statusGrey: {
+    height: 15,
+    width: 15,
+    borderRadius: 7.5,
+    margin: 5,
+    backgroundColor: 'grey',
   },
 });
 
