@@ -1,9 +1,9 @@
 {
-  "name": "universal",
-  "displayName": "universal",
+  "name": "BarberShop",
+  "displayName": "BarberShop",
   "expo": {
-    "name": "universal",
-    "slug": "universal",
+    "name": "BarberShop",
+    "slug": "BarberShop",
     "version": "1.0.0",
     "platforms": [
       "ios",
