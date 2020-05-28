@@ -3,17 +3,26 @@ import { Image, View, StyleSheet, Platform } from 'react-native';
 import RoundButtonEmptyLarge from '../../components/RoundButtonEmptyLarge';
 import Colors from '../../constants/Colors';
 import { isSmallDevice } from '../../constants/Layout';
+import { Body, Bold } from '../../components/StyledText';
 
 export const HomePage = ({ navigation: { navigate } }) => {
-
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image
           style={styles.logo}
-          source={require('../../../assets/images/logo.png')}
+          source={require('../../../assets/images/logo_full.png')}
           resizeMode="contain"
         />
+        <Body style={{flexDirection:"row"}}>
+            <Bold>Opening Times    </Bold>
+            <Body>8.30 AM - 6.30 PM / Tuesday Closed </Body>
+        </Body>
+        <View style={{height:50}}></View>
+        <Body style={{flexDirection:"row"}}>
+            <Bold>Phone Number    </Bold>
+            <Body>07456123566123 </Body>
+        </Body>
       </View>
       <View style={styles.buttonsWrapper}>
         <RoundButtonEmptyLarge
@@ -39,7 +48,7 @@ export const HomePage = ({ navigation: { navigate } }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.blue,
+    backgroundColor:"#FFFFFF",
     ...Platform.select({
       ios: {
         shadowColor: 'black',
@@ -61,8 +70,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     alignItems: 'center',
-    height: 128,
-    width: 128,
+    height: isSmallDevice ? 128:200,
+    width: isSmallDevice ? 128:200,
   },
   heading: {
     color: 'white',

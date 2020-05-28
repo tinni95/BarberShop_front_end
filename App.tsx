@@ -7,7 +7,6 @@ import { TOKEN_KEY } from './src/constants/Token';
 import ApolloClient from 'apollo-boost'
 import LoginContext from './src/context/LoginContext';
 import { ApolloProvider } from 'react-apollo';
-import AppWrapper from './src/screens/AppWrapper';
 import HomeStack from './src/navigation/HomeStack';
 
 export default function App() {
