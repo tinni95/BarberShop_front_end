@@ -8,6 +8,7 @@ import ApolloClient from 'apollo-boost'
 import LoginContext from './src/context/LoginContext';
 import { ApolloProvider } from 'react-apollo';
 import AppWrapper from './src/screens/AppWrapper';
+import HomeStack from './src/navigation/HomeStack';
 
 export default function App() {
   const [loggedIn, setLoggedin] = useState<boolean>(false);
@@ -69,7 +70,7 @@ export default function App() {
                 {!loggedIn ? (
                   <AuthenticationStack></AuthenticationStack>
                 ) : (
-                  <AppWrapper logout={() => logout()}></AppWrapper>
+                  <HomeStack></HomeStack>
                 )}
           </LoginContext.Provider>
           </ApolloProvider>

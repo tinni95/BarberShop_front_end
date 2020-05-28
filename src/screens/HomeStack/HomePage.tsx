@@ -1,11 +1,10 @@
 import React from 'react';
 import { Image, View, StyleSheet, Platform } from 'react-native';
-import { Body } from '../../components/StyledText';
 import RoundButtonEmptyLarge from '../../components/RoundButtonEmptyLarge';
 import Colors from '../../constants/Colors';
 import { isSmallDevice } from '../../constants/Layout';
 
-export const LandingPage = ({ navigation: { navigate } }) => {
+export const HomePage = ({ navigation: { navigate } }) => {
 
   return (
     <View style={styles.container}>
@@ -15,22 +14,22 @@ export const LandingPage = ({ navigation: { navigate } }) => {
           source={require('../../../assets/images/logo.png')}
           resizeMode="contain"
         />
-        <Body style={styles.heading}>Benvenuto!</Body>
       </View>
       <View style={styles.buttonsWrapper}>
         <RoundButtonEmptyLarge
-          textColor={Colors.primary}
+          bgColor={Colors.primary}
+          textColor={Colors.black}
           color={Colors.primary}
-          onPress={() => navigate('LoginScreen')}
-          text="Accedi"
+          onPress={() => navigate('TimePage')}
+          text="Book Now"
         />
         <View style={{ height: 20 }}></View>
         <RoundButtonEmptyLarge
           color={Colors.black}
           textColor={'white'}
           bgColor={Colors.black}
-          onPress={() => navigate('RegisterPage')}
-          text="Registrati"
+          onPress={() => navigate('ProfilePage')}
+          text="Profile"
         />
       </View>
     </View>
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
   },
 });
 
-LandingPage.navigationOptions = ({ navigation }) => {
+HomePage.navigationOptions = ({ navigation }) => {
   return {
     headerShown: false,
   };
