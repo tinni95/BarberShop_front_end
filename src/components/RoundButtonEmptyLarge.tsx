@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderWidth: 1,
     width: width - 80,
+    maxWidth:400
   },
   text: {
     color: 'white',

@@ -5,6 +5,7 @@
     "name": "BarberShop",
     "slug": "BarberShop",
     "version": "1.0.0",
+    "backgroundColor":"#FFFFFF",
     "platforms": [
       "ios",
       "android",

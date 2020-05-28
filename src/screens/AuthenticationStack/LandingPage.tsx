@@ -6,16 +6,15 @@ import Colors from '../../constants/Colors';
 import { isSmallDevice } from '../../constants/Layout';
 
 export const LandingPage = ({ navigation: { navigate } }) => {
-  console.log(require('../../../assets/images/logo.png'))
+
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image
           style={styles.logo}
-          source={require('../../../assets/images/logo.png')}
+          source={require('../../../assets/images/logo_full.png')}
           resizeMode="contain"
         />
-        <Body style={styles.heading}>Benvenuto!</Body>
       </View>
       <View style={styles.buttonsWrapper}>
         <RoundButtonEmptyLarge
@@ -62,8 +61,8 @@ const styles = StyleSheet.create({
   },
   logo: {
     alignItems: 'center',
-    height: 128,
-    width: 128,
+    height: Platform.OS==="web"?250:128,
+    width: Platform.OS==="web"?250:128,
   },
   heading: {
     color: 'white',
